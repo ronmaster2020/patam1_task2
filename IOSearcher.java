@@ -10,11 +10,12 @@ public class IOSearcher {
                 // open the file for reading
                 FileReader fileReader = new FileReader(fileName);
                 int data = fileReader.read();
+                boolean space = true;
                 // iterate over the file
                 while (data != -1) {
                     char ch = (char) data;
                     // check if the first character of the word is found
-                    if (ch == word.charAt(0)) {
+                    if (space && ch == word.charAt(0)) {
                         boolean found = true;
                         // check if the rest of the word is found
                         for (int i = 1; i < word.length(); i++) {
@@ -30,8 +31,24 @@ public class IOSearcher {
                         }
                         // if the word is found, return true
                         if (found) {
-                            return true;
+                            data = fileReader.read();
+                            if (data != -1) {
+                                ch = (char) data;
+                                if (ch < 'A' || (ch > 'Z' && ch < 'a') || ch > 'z') {
+                                    return true;
+                                } else {
+                                    found = false;
+                                    break;
+                                }
+                            } else {
+                                return true;
+                            }
                         }
+                    }
+                    if (ch == ' ') {
+                        space = true;
+                    } else {
+                        space = false;
                     }
                     // read the next character
                     data = fileReader.read();
