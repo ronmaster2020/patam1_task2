@@ -1,6 +1,5 @@
 package test;
 import java.security.MessageDigest;
-import java.util.HashSet;
 import java.util.BitSet;
 import java.math.BigInteger;
 
@@ -31,7 +30,8 @@ public class BloomFilter {
     }
     public boolean contains(String word) {
         for (MessageDigest hashAlg : hashAlgorithms) {
-            byte[] digest = hashAlg.digest(word.getBytes());
+            hashAlg.update(word.getBytes());
+            byte[] digest = hashAlg.digest();
             BigInteger bigInt = new BigInteger(1, digest);
             int index = bigInt.intValue() % set.size();
             index = index < 0 ? -index : index;
